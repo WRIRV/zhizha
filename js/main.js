@@ -184,6 +184,9 @@ let timeL;
 triggerLeft.addEventListener('touchstart', function(){
     ply.src = 'media/zhizha-left.png'
     clearInterval(timeR);
+    if(timeL){
+        clearInterval(timeL);
+    }
     timeL = setInterval(function(){
         if(x <= 0){
             clearInterval(timeL);
@@ -198,6 +201,9 @@ let timeR;
 triggerRight.addEventListener('touchstart', function(){
     ply.src = 'media/zhizha-right.png';
     clearInterval(timeL);
+    if(timeR){
+        clearInterval(timeR);
+    }
     timeR = setInterval(function(){
         if(x >= (window.innerWidth - ply.width - 10)){
             clearInterval(timeR);
