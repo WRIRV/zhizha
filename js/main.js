@@ -27,16 +27,23 @@ function gameAppend(){
     triggerLeft.classList.remove('deleted');
     triggerRight.classList.remove('deleted');
 
-    i = 1;
-    isLose = false;
+    //ресет жижи
+    x = 250;
+    ply.src = 'media/zhizha-right.png';
+    ply.style.top = 700 + 'px';
+    ply.style.left = 250 + 'px';
 
+    isLose = false;
+    scoreNum = 0 //при проигрыше все очки обнуляются
+    score.innerHTML = 'Очки: 0';
+    roundBegin = true;
+
+    //таймеры для постоянного выполнения действий и проверок
     l = setInterval(function(){
         if(isLose){
             clearInterval(l);
             clearInterval(t);
             gameClosed();
-            result.innerHTML = 'Результат: ' + i;
-            i = 0;
             openMainMenu();
         }
     }, 1);
@@ -55,32 +62,32 @@ function gameClosed(){
     triggerLeft.classList.add('deleted');
     triggerRight.classList.add('deleted');
 
-    clearInterval(l);
-    clearInterval(t);
+    roundBegin = false;
 }
 
-let i = 1;
-let isLose = false;
-function shootingMelon(){
+let scoreNum = 0;
+let isLose = false; //меняется когда арбуз сталкивается с жижой
+let roundBegin = false;
+function shootingMelon(){ //оптимизировать
     //арбуз
     let melon = document.createElement('img');
     melon.src = 'media/melon.png';
     melon.style.width = 300 + 'px';
     melon.style.height = 300 + 'px';
     melon.style.position = 'absolute';
-    melon.style.top = -300 + 'px';
-    let pos = Math.round(Math.random() * (window.innerWidth - 380))
-    melon.style.left = pos + 'px';
+    let posX = Math.round(Math.random() * (window.innerWidth - 380));
+    melon.style.top = 10 + 'px';
+    melon.style.left = posX + 'px'; 
     body.prepend(melon);
 
     //коллизия арбуза
     let melonRect = document.createElement('div');
-    melonRect.style.width = 300 + 'px';
-    melonRect.style.height = 300 + 'px';
-    /*melonRect.style.backgroundColor = '#ff00002f';*/
+    melonRect.style.width = 250 + 'px';
+    melonRect.style.height = 225 + 'px';
+    //melonRect.style.backgroundColor = '#ff00002f';
     melonRect.style.position = 'absolute';
-    melonRect.style.top = -300 + 'px';
-    melonRect.style.left = pos + 'px';
+    melonRect.style.top = -300 + 50 + 'px'; //тут и ниже +25, чтобы хитбокс был посередине спрайта арбуза
+    melonRect.style.left = posX + 25 + 'px';
     body.prepend(melonRect);
 
     function checkCollision(){
@@ -111,11 +118,13 @@ function shootingMelon(){
 
         //логика пропадания арбузов
         let melonTop = parseInt(melon.style.top, 10);
-        if(melonTop >= 1200 && !isRemoved){
+        if(melonTop >= 950 && !isRemoved){
             isRemoved = true;
             melon.remove();
             melonRect.remove();
-            score.innerHTML = 'Очки: ' + i++;
+            clearInterval(deletingAfterGame);
+            scoreNum++;
+            score.innerHTML = 'Очки: ' + scoreNum;
         }
         //проигрышная логика
         if(isLose){
@@ -126,6 +135,15 @@ function shootingMelon(){
         requestAnimationFrame(falling);
     }
     falling();
+
+    const deletingAfterGame = setInterval(function(){
+        if(!roundBegin){
+            isRemoved = true;
+            melon.remove();
+            melonRect.remove();
+            clearInterval(deletingAfterGame);
+        }
+    }, 50);
 }
 
 //в главном меню
@@ -156,7 +174,6 @@ quitButton.addEventListener('click', function(){
     menuMus.currentTime = 0;
     gameClosed()
     result.innerHTML = 'Результата пока нет.';
-    i = 0;
     openMainMenu()
 });
 
@@ -166,9 +183,11 @@ let timeL;
         //нажатие на 1 половину экрана
 triggerLeft.addEventListener('touchstart', function(){
     ply.src = 'media/zhizha-left.png'
+    clearInterval(timeR);
     timeL = setInterval(function(){
         if(x <= 0){
-            x += 10;
+            clearInterval(timeL);
+            ply.style.left = 0 + 'px';
         }
         x -= 10;
         ply.style.left = x + 'px';
@@ -178,24 +197,18 @@ triggerLeft.addEventListener('touchstart', function(){
 let timeR;
 triggerRight.addEventListener('touchstart', function(){
     ply.src = 'media/zhizha-right.png';
+    clearInterval(timeL);
     timeR = setInterval(function(){
-        if(x >= window.innerWidth - ply.width){
-            x -= 10;
+        if(x >= (window.innerWidth - ply.width - 10)){
+            clearInterval(timeR);
+            ply.style.left = (window.innerWidth - ply.width - 10) + 'px';
         }
         x += 10;
         ply.style.left = x + 'px';
     }, 10);
 });
 
-        //отжатие от 1 половины экрана
-triggerLeft.addEventListener('touchend', function(){
-    clearInterval(timeL);
-});
-        //отжатие от 1 половины экрана
-triggerRight.addEventListener('touchend', function(){
-    clearInterval(timeR);
-});
-
 //независимые объекты
 const menuMus = document.querySelector('.menu-mus');
 const body = document.querySelector('body');
+const html = document.querySelector('html');
