@@ -1,0 +1,14 @@
+.player-container{
+    position: absolute;
+}
+
+.player-hitbox{
+    position: absolute;
+    /*background: rgba(255, 38, 38, 0.5);*/
+}
+
+.player-image{
+    position: absolute;
+    top: 0;
+    left: 0;
+}

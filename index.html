@@ -3,31 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <title>Побег от таджика</title>
+
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/player.css">
+<link rel="stylesheet" href="css/projectile.css">
+
+<script src="js/Player.js" defer></script>
+<script src="js/Projectile.js" defer></script>
+<script src="js/Game.js" defer></script>
 <script src="js/main.js" defer></script>
 </head>
 
-<body>
+<body class="body-change">
 
-<!--главное меню-->
-<h1 class="menu">Жижа и арбузная лихорадка</h1>
-<button type="button" class="play-button">Играть</button>
-<h1 class="result">Результата пока нет.</h1>
-<audio loop class="menu-mus">
-<source src="sound/menu.mp3" type="audio/mpeg">
-</audio>
+    <audio loop class="menu-mus">
+        <source src="sound/menu.mp3" type="audio/mpeg">
+    </audio>
 
-<!--игра-->
-<div class="menu-bar">
-<h1 class="score deleted">Очки: 0</h1>
-<button type="button" class="quit-game deleted">Выйти из игры</button>
-</div>
+    <!--главное меню-->
+    <div class="main-menu">
+        <h1 class="menu">Жижа и арбузная лихорадка</h1>
+        <button type="button" class="play-button">Играть</button>
+        <h1 class="result">Результата пока нет.</h1>
+    </div>
 
-<div class="margin-roof deleted"></div>
-<img src="media/zhizha-right.png" width="250" height="500" class="zhizha deleted">
-<div class="floor deleted"></div>
+    <!--игра-->
+    <div class="game-scene deleted">
+        <div class="menu-bar">
+            <h1 class="score">Очки: 0</h1>
+            <button type="button" class="quit-game">Выйти из игры</button>
+        </div>
 
-<div class="trigger-left deleted"></div>
-<div class="trigger-right deleted"></div>
+        <div class="margin-roof"></div>
+        <div class="floor"></div>
+
+        <div class="trigger-left"></div>
+        <div class="trigger-right"></div>
+    </div>
 </body>
 </html>
